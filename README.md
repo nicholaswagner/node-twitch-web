@@ -2,6 +2,8 @@
 
 Node.js website using Twitch authentication.
 
+![](https://david-dm.org/Schmoopiie/node-twitch-web.png)
+
 ### Under development
 
 node-twitch-web is working but is still under development. No wiki or tutorials available yet.
