@@ -1,6 +1,10 @@
-# NOT RELEASED YET
+# node-twitch-web
 
-Node.js module allowing you to create a website and use Twitch Authentication.
+Node.js website using Twitch authentication.
+
+### Under development
+
+node-twitch-web is working but is still under development. No wiki or tutorials available yet.
 
 ## Copyright and license
 
