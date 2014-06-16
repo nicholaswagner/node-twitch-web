@@ -28,9 +28,13 @@
    }],
   "readmeFilename": "README.md",
   "dependencies": {
+	"body-parser": "*",
+	"cookie-parser": "*",
 	"ejs-locals": "*",
+	"express-session": "*",
+	"method-override": "*",
 	"passport": "*",
 	"passport-oauth": "*",
-	"underscore": "*"
+	"serve-favicon": "*"
   }
 }

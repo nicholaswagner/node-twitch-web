@@ -26,15 +26,15 @@ Strategy.prototype.userProfile = function(accessToken, done) {
 		
 		try {
 			var json = JSON.parse(body);
-			  
+
 			var profile = { provider: 'twitch' };
 			profile.id = json._id;
 			profile.username = json.name;
 			profile.email = json.email;
-			  
+
 			profile._raw = body;
 			profile._json = json;
-			  
+
 			done(null, profile);
 		} catch(e) {
 			done(e);

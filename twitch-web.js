@@ -1,21 +1,4 @@
-var eg = require('ejs-locals'),
-	ex = require('express'),
-	hp = require('http'),
-	pp = require('passport'),
-	pt = require('path'),
-	st = require('./librairies/twitch').Strategy;
-
-/**
- * You will need to register a new application on Twitch.
- * Go to http://www.twitch.tv/kraken/oauth2/clients/new and create your application.
- * 
- * We suggest to use the callback url below when you register your application.
- * 
- * Once created, you will have your ClientID and SecretID.
- */
-var TWITCHTV_CLIENT_ID = 'YOUR_CLIENT_ID';
-var TWITCHTV_CLIENT_SECRET = 'YOUR_SECRET_ID';
-var CALLBACK_URL = 'http://127.0.0.1/auth/twitch/callback';
+var web = require('./librairies/imports');
 
 /**
  * Use this middleware to protect a page.
@@ -28,21 +11,21 @@ function ensureAuthenticated(req, res, next) {
 /**
  * Serialize / deserialize a user.
  */
-pp.serializeUser(function(user, done) {
+web.passport.serializeUser(function(user, done) {
 	done(null, user);
 });
 
-pp.deserializeUser(function(obj, done) {
+web.passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
 
 /**
  * Use Twitch Strategy along with passport to retrieve the user's informations.
  */
-pp.use(new st({
-	clientID: TWITCHTV_CLIENT_ID,
-	clientSecret: TWITCHTV_CLIENT_SECRET,
-	callbackURL: CALLBACK_URL,
+web.passport.use(new web.strategy({
+	clientID: web.config.clientid,
+	clientSecret: web.config.clientsecret,
+	callbackURL: web.config.callbackurl,
 	scope: "user_read"
 	},
 	function(accessToken, refreshToken, profile, done) {
@@ -55,55 +38,54 @@ pp.use(new st({
 /**
  * Setting up express.
  */
-var app = ex();
+var app = web.express();
 
-app.set('port', process.env.PORT || 80);
-app.engine('ejs', eg);
+app.set('port', process.env.PORT || web.config.port);
+app.engine('ejs', web.ejslocals);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use(ex.favicon());
-app.use(ex.cookieParser());
-app.use(ex.bodyParser());
-app.use(ex.methodOverride());
-app.use(ex.session({ secret: 'keyboard cat' }));
-app.use(pp.initialize());
-app.use(pp.session());
-app.use(app.router);
-app.use(ex.static(pt.join(__dirname, 'public')));
+app.use(web.favicon(__dirname + '/public/favicon.ico'));
+app.use(web.cookieparser('secret string'));
+app.use(web.bodyparser());
+app.use(web.method());
+app.use(web.session({ secret: 'keyboard cat' }));
+app.use(web.passport.initialize());
+app.use(web.passport.session());
+app.use(web.express.static(web.path.join(__dirname, 'public')));
 
 
 /**
  * Routes
  */
-
 app.get('/', function(req, res){
-  res.render('index', { title: 'Hello', user: req.user });
+	res.render('index', { user: req.user });
 });
 
 // User must be logged in to see the content of this page.
 app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { title: 'Hello', user: req.user });
+	res.render('account', { user: req.user });
 });
 
 app.get('/login', function(req, res){
-  res.render('login', { title: 'Hello', user: req.user });
+	res.render('login', { user: req.user });
 });
 
 // Redirect the user to Twitch for authentication.
-app.get('/auth/twitch', pp.authenticate('twitch', { scope: ['user_read'] }), function(req, res){
+app.get('/auth/twitch', web.passport.authenticate('twitch', { scope: ['user_read'] }), function(req, res){
 	//
 });
 
 // Authenticate the user.
-app.get('/auth/twitch/callback', pp.authenticate('twitch', { failureRedirect: '/login' }), function(req, res) {
-    res.redirect('/');
+app.get('/auth/twitch/callback', web.passport.authenticate('twitch', { failureRedirect: '/login' }), function(req, res) {
+	res.redirect('/');
 });
 
+// Logout the user.
 app.get('/logout', function(req, res){
 	req.logout();
 	res.redirect('/');
 });
 
-hp.createServer(app).listen(app.get('port'), function(){
+web.http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
