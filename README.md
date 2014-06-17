@@ -1,12 +1,23 @@
 # node-twitch-web
 
-Node.js website using Twitch authentication.
+Node.js website using Twitch authentication (OAuth). Sessions are stored into a database, if the application restarts, users won't be logged out. You can create a Mongo database for free at [mongolab.com](mongolab.com).
 
 ![](https://david-dm.org/Schmoopiie/node-twitch-web.png)
 
-### Under development
+### Installation
 
-node-twitch-web is working but is still under development. No wiki or tutorials available yet.
+1- [Download](https://github.com/Schmoopiie/node-twitch-web/archive/master.zip) the code from GitHub.
+
+2- Extract the file.
+
+3- Open config.js and configure everything.
+
+4- Run the web server: ``node twitch-web.js``
+
+### Questions or need help?
+
+Contact me on Twitter [@Schmoopiie](https://twitter.com/Schmoopiie/) or [create an issue on GitHub](https://github.com/Schmoopiie/node-twitch-web/issues).
+
 
 ## Copyright and license
 
