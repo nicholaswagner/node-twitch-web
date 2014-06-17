@@ -23,9 +23,9 @@ web.passport.deserializeUser(function(obj, done) {
  * Use Twitch Strategy along with passport to retrieve the user's informations.
  */
 web.passport.use(new web.strategy({
-	clientID: web.config.clientid,
-	clientSecret: web.config.clientsecret,
-	callbackURL: web.config.callbackurl,
+	clientID: web.config.clientID,
+	clientSecret: web.config.clientSecret,
+	callbackURL: web.config.callbackURL,
 	scope: "user_read"
 	},
 	function(accessToken, refreshToken, profile, done) {
@@ -45,10 +45,17 @@ app.engine('ejs', web.ejslocals);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(web.favicon(__dirname + '/public/favicon.ico'));
-app.use(web.cookieparser('secret string'));
+app.use(web.cookieparser(web.config.cookieSecret));
 app.use(web.bodyparser());
 app.use(web.method());
-app.use(web.session({ secret: 'keyboard cat' }));
+var session = web.session({
+    store: new web.mongosession({
+          url: web.config.mongoURL,
+          maxAge: web.config.sessionMaxAge
+    }),
+    secret: web.config.sessionSecret
+});
+app.use(session);
 app.use(web.passport.initialize());
 app.use(web.passport.session());
 app.use(web.express.static(web.path.join(__dirname, 'public')));

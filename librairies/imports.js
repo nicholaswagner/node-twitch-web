@@ -11,4 +11,7 @@ exports.ejslocals = require('ejs-locals');
 exports.favicon = require('serve-favicon');
 exports.express = require('express');
 exports.method = require('method-override');
-exports.session = require('express-session');
+
+var session = require('express-session');
+exports.session = session;
+exports.mongosession = require('connect-mongo')(session);
