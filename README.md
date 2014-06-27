@@ -12,9 +12,11 @@ Node.js website using Twitch authentication (OAuth). Sessions are stored into a 
 
 3- Open config.js and configure everything.
 
-4- Run the web server: ``node twitch-web.js``
+4- Install all dependencies: ``npm install``
 
-5- Visit your website: ``http://127.0.0.1`` or ``http://127.0.0.1:5555`` if you changed the port to 5555.
+5- Run the web server: ``node twitch-web.js``
+
+6- Visit your website: ``http://127.0.0.1`` or ``http://127.0.0.1:5555`` if you changed the port to 5555.
 
 ### Questions or need help?
 
