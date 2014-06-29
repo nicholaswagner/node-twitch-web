@@ -32,6 +32,7 @@
 	"connect-mongo": "*",
 	"cookie-parser": "*",
 	"ejs-locals": "*",
+	"express": "*",
 	"express-session": "*",
 	"method-override": "*",
 	"passport": "*",
